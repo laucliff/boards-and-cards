@@ -1,0 +1,50 @@
+<head>
+  <title>test-meteor</title>
+</head>
+
+<body>
+  {{>login}}
+  {{>main}}
+</body>
+
+<template name="main">
+  {{greeting}}
+  <div class="stats">{{numCards}} Cards over {{numBoards}} Boards.</div>
+  <div class="boards">
+    {{#each boards}}
+      {{> board}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="login">
+  {{#if currentUser}}
+    {{currentUser.username}}
+    <input type="button" class="logout" value="logout">
+  {{/if}}
+  <form>
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" class="username">
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="text" class="password">
+    </div>
+    <input type="button" class="login" value="login">
+  </form>
+  <div class="users">
+    {{#each users}}
+      {{> user}}
+    {{/each}}
+  </div>
+  <input type="text" class="new-username">
+  <input type="button" class="add-user" value="New User">
+  <div class="stats">{{numUsers}} Users.</div>
+</template>
+
+<template name="user">
+  <div class="user">
+    {{username}}
+  </div>
+</template>
