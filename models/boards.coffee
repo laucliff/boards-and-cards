@@ -33,8 +33,18 @@ if Meteor.isServer
 
   Meteor.startup ->
     # Bootstrap in some test data
-    numTestBoards = 2
+    numTestBoards = 3
+    numTestCards = 2
+
     if Boards.find().count() != numTestBoards
       Boards.find().forEach (board) ->
         Boards.destroyBoard board._id
-      Boards.createBoard name: "board#{n}" for n in [0..numTestBoards-1]
+      if numTestBoards > 0
+        for n in [0..numTestBoards-1]
+          Boards.createBoard name: "board#{n}", (err, id) ->
+            return if not id
+            numCards = Math.round numTestCards*Math.random()
+            console.log numCards
+            if numCards > 0
+              App.Cards.createCard board_id: id for n in [0..numCards-1]
+
