@@ -41,3 +41,7 @@ Template.login.events
         console.log err
       else
         console.log 'user created'
+
+  'click .delete-user': (e, t) ->
+    # Meteor.users.remove this._id
+    Meteor.call 'deleteUser', this._id

@@ -3,6 +3,12 @@ App = share
 Template.board.cards = () ->
   App.Cards.find board_id: this._id
 
+Template.board.ownerName = () ->
+  ownerId = this.owner_id
+  username = Meteor.users.findOne(_id: ownerId)?.username
+
+  username or 'No Owner'
+
 Template.board.events
   'click .new-card': (e, t) ->
 

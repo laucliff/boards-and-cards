@@ -1,6 +1,8 @@
 <template name="board">
   <div class="board">
     {{name}}
+    {{type}}
+    {{ownerName}}
     <div class="cards">
       {{#each cards}}
         {{> card}}
