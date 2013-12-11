@@ -1,7 +1,7 @@
 App = share
 
 Template.card.boards = ->
-  App.Boards.find()
+  App.Boards.getAllowedBoards()
 
 Template.card.events
   'click .update-card': (e, t) ->

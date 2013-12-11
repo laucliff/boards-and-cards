@@ -2,7 +2,23 @@ App = share
 
 class BoardsCollection extends Meteor.Collection
   getDefaultBoard: ->
-    Boards.findOne(name: 'board0')
+    if Meteor.user()
+      Boards.findOne
+        type: 'private'
+        owner_id: Meteor.user()._id
+    else
+      Boards.findOne(type: 'public')
+
+  getAllowedBoards: (userId) ->
+
+    ownerId = userId or Meteor.user()?._id
+
+    Boards.find
+      $or: [
+          owner_id: ownerId
+        ,
+          type: 'public'
+        ]
 
   createBoard: (newData, callback)->
     Boards.insert newData, callback
@@ -35,16 +51,24 @@ if Meteor.isServer
     # Bootstrap in some test data
     numTestBoards = 3
     numTestCards = 2
+    resetPublicBoards = false
 
-    if Boards.find().count() != numTestBoards
-      Boards.find().forEach (board) ->
+    # if Boards.find().count() != numTestBoards
+    if resetPublicBoards
+      Boards.find(type: 'public').forEach (board) ->
         Boards.destroyBoard board._id
       if numTestBoards > 0
         for n in [0..numTestBoards-1]
-          Boards.createBoard name: "board#{n}", (err, id) ->
+          Boards.createBoard
+            name: "public board #{n}"
+            type: 'public'
+          , (err, id) ->
             return if not id
             numCards = Math.round numTestCards*Math.random()
             console.log numCards
             if numCards > 0
               App.Cards.createCard board_id: id for n in [0..numCards-1]
+
+    # Boards.find(type: 'private').forEach (board) ->
+    #   Boards.destroyBoard board._id
 

@@ -11,3 +11,4 @@ Template.main.greeting = () ->
 
 Template.main.boards = ->
   App.Boards.find()
+  # App.Boards.getAllowedBoards()
