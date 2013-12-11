@@ -7,7 +7,7 @@ class CardsCollection extends Meteor.Collection
       content: 'New Card'
       board_id: App.Boards.getDefaultBoard()._id
 
-    data.content = 'New Card' if data.content.length < 1
+    data.content = 'New Card' if data.content?.length < 1
 
     @insert data, callback
 
