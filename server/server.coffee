@@ -15,3 +15,6 @@ Meteor.publish 'allBoards', ->
 
 Meteor.publish 'allUsers', ->
   Meteor.users.find()
+
+Meteor.publish 'visibleComments', ->
+  App.Comments.find()
