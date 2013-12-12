@@ -9,9 +9,12 @@ Template.login.numUsers = ->
 Template.login.showLogin = ->
   Session.get 'showLogin'
 
-Template.login.events
-  'click .toggle-login': (e, t) ->
+toggleLogin = (e, t) ->
     Session.set 'showLogin', !Session.get('showLogin')
+
+Template.login.events
+  'click .toggle-login'   : toggleLogin
+  'click .login-backdrop' : toggleLogin
 
   'click .login': (e, t) ->
     username = t.find('.username').value
