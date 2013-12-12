@@ -8,12 +8,14 @@
 </body>
 
 <template name="main">
-  <div class="boards">
-    {{#each boards}}
-      {{> board}}
-    {{/each}}
-  </div>
-  <div class="my-board dock">
-    {{> board myBoard}}
+  <div class="main">
+    <div class="boards">
+      {{#each boards}}
+        {{> board}}
+      {{/each}}
+    </div>
+    <div class="my-board dock">
+      {{> board myBoard}}
+    </div>
   </div>
 </template>

@@ -9,10 +9,6 @@
   background-color: salmon;
 }
 
-.card {
-  border: 1px solid black;
-  background-color: lightgray;
-}
 
 .header {
   top: 0;
@@ -20,7 +16,16 @@
   background-color: gray;
 }
 
+.main {
+  position: relative;
+}
+
 .board {
   background-color: green;
   border: 1px dotted black;
+}
+
+.card {
+  border: 1px solid black;
+  background-color: lightgray;
 }
