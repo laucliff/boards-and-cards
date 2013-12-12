@@ -4,7 +4,7 @@ if Meteor.server
   Accounts.onCreateUser (options, user) ->
     App.Boards.createBoard
       owner_id: user._id
-      type: 'private'
+      type: 'personal'
       name: "#{user.username}'s Board"
 
     user

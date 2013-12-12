@@ -3,22 +3,31 @@ App = share
 class BoardsCollection extends Meteor.Collection
   getDefaultBoard: ->
     if Meteor.user()
-      Boards.findOne
-        type: 'private'
-        owner_id: Meteor.user()._id
+      @getMyBoard()
     else
       Boards.findOne(type: 'public')
+
+  getPublicBoards: ->
+    @find type: 'public'
+
+  getMyBoard: ->
+    # @find owner_id: Meteor.user()._id
+    @findOne 
+      owner_id: Meteor.user()._id
+      type: 'personal'
 
   getAllowedBoards: (userId) ->
 
     ownerId = userId or Meteor.user()?._id
 
-    Boards.find
+    @find
       $or: [
           owner_id: ownerId
         ,
           type: 'public'
         ]
+      type: 
+        $ne: 'personal'
 
   createBoard: (newData, callback)->
     Boards.insert newData, callback

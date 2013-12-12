@@ -6,6 +6,7 @@ class CardsCollection extends Meteor.Collection
     data = _.defaults {}, newData,
       content: 'New Card'
       board_id: App.Boards.getDefaultBoard()._id
+      user_id: Meteor.user()?._id
 
     data.content = 'New Card' if data.content?.length < 1
 

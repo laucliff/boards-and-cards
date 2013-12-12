@@ -7,14 +7,34 @@ Meteor.startup () ->
 
   console.log "#{Meteor.users.find().count()} Users."
 
-Meteor.publish 'allCards', ->
+Meteor.publish 'cards', ->
   App.Cards.find()
 
-Meteor.publish 'allBoards', ->
-  App.Boards.find()
+  publicBoardIds = App.Boards.getPublicBoards().map (board) ->
+    board._id
+
+  myBoardIds = App.Boards.find(owner_id: this.userId).map (board) ->
+    board._id
+
+  App.Cards.find 
+    $or: [
+      user_id: this.userId
+    ,
+      board_id: 
+        $in: publicBoardIds.concat myBoardIds
+    ]
 
 Meteor.publish 'allUsers', ->
   Meteor.users.find()
 
-Meteor.publish 'visibleComments', ->
+Meteor.publish 'boards', () ->
+  # App.Boards.getAllowedBoards this.userId
+  App.Boards.find
+    $or: [
+        owner_id: this.userId
+      ,
+        type: 'public'
+      ]
+
+Meteor.publish 'comments', ->
   App.Comments.find()
