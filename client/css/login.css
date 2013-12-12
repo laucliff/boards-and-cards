@@ -1,0 +1,6 @@
+.login-window {
+  position: absolute;
+  background-color: lightblue;
+  width: auto;
+  z-index: 1;
+}

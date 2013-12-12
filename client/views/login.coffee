@@ -6,7 +6,13 @@ Template.login.users = ->
 Template.login.numUsers = ->
   Meteor.users.find().count()
 
+Template.login.showLogin = ->
+  Session.get 'showLogin'
+
 Template.login.events
+  'click .toggle-login': (e, t) ->
+    Session.set 'showLogin', !Session.get('showLogin')
+
   'click .login': (e, t) ->
     username = t.find('.username').value
     password = 'password'
