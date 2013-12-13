@@ -9,14 +9,11 @@ Template.login.numUsers = ->
 Template.login.showLogin = ->
   Session.get 'showLogin'
 
-toggleLogin = (e, t) ->
+Template.login.events
+  'click .toggle-login' : (e, t) ->
     Session.set 'showLogin', !Session.get('showLogin')
 
-Template.login.events
-  'click .toggle-login'   : toggleLogin
-  'click .login-backdrop' : toggleLogin
-
-  'click .login': (e, t) ->
+  'click .login-button': (e, t) ->
     username = t.find('.username').value
     password = 'password'
 
@@ -26,7 +23,7 @@ Template.login.events
       else
         console.log "Login Success."
 
-  'click .logout': (e,t) ->
+  'click .logout-button': (e,t) ->
     Meteor.logout (err) ->
       if err?
         console.log "Logout Failed: #{err}"

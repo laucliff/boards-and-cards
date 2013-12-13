@@ -3,9 +3,16 @@
 </head>
 
 <body>
+  {{> app}}
+</body>
+
+<template name="app">
+  {{#if showLogin}}
+    <div class='login-backdrop'></div>
+  {{/if}}
   {{> header}}
   {{> main}}
-</body>
+</template>
 
 <template name="main">
   <div class="main">

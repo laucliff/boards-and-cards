@@ -1,36 +1,36 @@
 <template name="login">
-  <div class="toggle-login">
-    Login
-  </div>
-  {{#if showLogin}}
-    <div class="login-backdrop">
+  <div class="login">
+    <div class="toggle-login">
+      Login
     </div>
-    <div class="login-window">
-      {{#if currentUser}}
-        {{currentUser.username}}
-        <input type="button" class="logout" value="logout">
-      {{/if}}
-      <form>
-        <div>
-          <label for="username">Username:</label>
-          <input type="text" class="username">
+    {{#if showLogin}}
+      <div class="login-window">
+        {{#if currentUser}}
+          {{currentUser.username}}
+          <input type="button" class="logout-button" value="logout">
+        {{/if}}
+        <form>
+          <div>
+            <label for="username">Username:</label>
+            <input type="text" class="username">
+          </div>
+          <div>
+            <label for="password">Password:</label>
+            <input type="text" class="password">
+          </div>
+          <input type="button" class="login-button" value="login">
+        </form>
+        <div class="users">
+          {{#each users}}
+            {{> user}}
+          {{/each}}
         </div>
-        <div>
-          <label for="password">Password:</label>
-          <input type="text" class="password">
-        </div>
-        <input type="button" class="login" value="login">
-      </form>
-      <div class="users">
-        {{#each users}}
-          {{> user}}
-        {{/each}}
+        <input type="text" class="new-username">
+        <input type="button" class="add-user" value="New User">
+        <div class="stats">{{numUsers}} Users.</div>
       </div>
-      <input type="text" class="new-username">
-      <input type="button" class="add-user" value="New User">
-      <div class="stats">{{numUsers}} Users.</div>
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
 </template>
 
 <template name="user">
