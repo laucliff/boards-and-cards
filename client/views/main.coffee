@@ -24,6 +24,10 @@ Template.app.events
       # console.log document.elementFromPoint e.pageX, e.pageY
       # $el.show()
 
+Template.app.created = ->
+  #Fixes isDragging session var preserving through automated refresh on code change.
+  Session.set 'isDragging', false
+
 Template.app.rendered =  ->
 
   # Element dragging is handled on the app level in order to allow dragging anywhere in the app space.
