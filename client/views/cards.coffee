@@ -42,9 +42,16 @@ Template.card.events
 
     App.Cards.moveCard this._id, newBoardId
 
-  'click': (e, t) ->
+  'mousedown': (e, t) ->
+    t.mouseDown = true
 
-    if not Session.get 'cardDragging'
+  'mouseup': (e, t) ->
+    t.mouseDown = false
+    if Session.get 'cardDragging'
+      Session.set 'cardDragging', null
+
+  'mousemove': (e, t) ->
+    if t.mouseDown and not Session.get 'cardDragging'
       el = t.find('.card')
 
       Session.set 'cardDragging', 

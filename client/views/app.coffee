@@ -40,10 +40,13 @@ Template.app.events
         y: e.pageY
 
       # todo:
-      # get targetElement
-      # if above 50% height, insert placeholder before, else after
       # on drop trigger dragDrop event on targetElement. pass card id
       # on dragDrop update dragging card board_id to target board_id
+
+  # 'mouseup': (e, t) ->
+  #   console.log 'mouseup'
+  #   if Session.get 'cardDragging'
+  #     Session.set 'cardDragging', null
 
 Template.app.rendered = ->
   $el = $('.app')
