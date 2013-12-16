@@ -1,7 +1,32 @@
 App = share
 
-Template.card.boards = ->
-  App.Boards.getAllowedBoards()
+setPlaceholder = (cardId, orientation) ->
+  Session.set 'currentCardPlaceholder',
+    cardId: cardId
+    orientation: orientation
+
+Template.card.helpers
+  boards: ->
+    App.Boards.getAllowedBoards()
+
+  # This is calling render on every card every time placeholder is updated.
+  # Should only update if losing a placeholder, or adding/moving a placeholder.
+  hasPlaceholder: (orientation) ->
+    placeholder = Session.get 'currentCardPlaceholder'
+    return null if placeholder?.cardId != this._id
+
+    if !orientation 
+      return true
+    else
+      return placeholder.orientation == orientation
+
+  dragging: ->
+    cardDragging = Session.get 'cardDragging'
+    if cardDragging and cardDragging.id == this._id
+      return 'dragging'
+    else
+      return ''
+
 
 Template.card.events
   'click .update-card': (e, t) ->
@@ -32,29 +57,6 @@ Template.card.events
       $(el).trigger 'dragStart',
         clickEvent: e
         target: el
-
-setPlaceholder = (cardId, orientation) ->
-  Session.set 'currentCardPlaceholder',
-    cardId: cardId
-    orientation: orientation
-
-# This is calling render on every card every time placeholder is updated.
-# Should only update if losing a placeholder, or adding/moving a placeholder.
-Template.card.hasPlaceholder = (orientation) ->
-  placeholder = Session.get 'currentCardPlaceholder'
-  return null if placeholder?.cardId != this._id
-
-  if !orientation 
-    return true
-  else
-    return placeholder.orientation == orientation
-
-Template.card.dragging = ->
-  cardDragging = Session.get 'cardDragging'
-  if cardDragging and cardDragging.id == this._id
-    return 'dragging'
-  else
-    return ''
 
 Template.card.rendered = ->
   $el = $(@find('.card'))

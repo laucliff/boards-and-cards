@@ -1,7 +1,8 @@
 App = share
 
-Template.app.showLogin = ->
-  Session.get 'showLogin'
+Template.app.helpers
+  showLogin: ->
+    Session.get 'showLogin'
 
 Template.app.events
   'click .login-backdrop': (e, t) ->
@@ -53,9 +54,10 @@ Template.app.rendered = ->
     # Clear placeholder.
     Session.set 'currentCardPlaceholder', null
 
-Template.main.boards = ->
-  App.Boards.getAllowedBoards()
+Template.main.helpers
+  boards: ->
+    App.Boards.getAllowedBoards()
 
-Template.main.myBoard = ->
-  if Meteor.user()?
-    App.Boards.getMyBoard()
+  myBoard: ->
+    if Meteor.user()?
+      App.Boards.getMyBoard()

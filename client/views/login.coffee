@@ -1,13 +1,14 @@
 App = share
 
-Template.login.users = ->
-  Meteor.users.find()
+Template.login.helpers
+  users: ->
+    Meteor.users.find()
 
-Template.login.numUsers = ->
-  Meteor.users.find().count()
+  numUsers: ->
+    Meteor.users.find().count()
 
-Template.login.showLogin = ->
-  Session.get 'showLogin'
+  showLogin: ->
+    Session.get 'showLogin'
 
 Template.login.events
   'click .toggle-login' : (e, t) ->
