@@ -54,16 +54,12 @@ Template.card.events
     if t.mouseDown and not Session.get 'cardDragging'
       el = t.find('.card')
 
+      # Dragging handled in app.coffee
       Session.set 'cardDragging', 
         id: this._id
         offset:
           x: e.pageX
           y: e.pageY
-
-      # dragStart handled in app template.
-      $(el).trigger 'dragStart',
-        clickEvent: e
-        target: el
 
 Template.card.rendered = ->
   $el = $(@find('.card'))
