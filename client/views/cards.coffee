@@ -38,15 +38,16 @@ setPlaceholder = (cardId, orientation) ->
     cardId: cardId
     orientation: orientation
 
+# This is calling render on every card every time placeholder is updated.
+# Should only update if losing a placeholder, or adding/moving a placeholder.
 Template.card.hasPlaceholder = (orientation) ->
   placeholder = Session.get 'currentCardPlaceholder'
-  if placeholder?.cardId == this._id
-    if !orientation 
-      return true
-    else
-      return placeholder.orientation == orientation
+  return null if placeholder?.cardId != this._id
+
+  if !orientation 
+    return true
   else
-    return null
+    return placeholder.orientation == orientation
 
 Template.card.dragging = ->
   cardDragging = Session.get 'cardDragging'
@@ -62,9 +63,9 @@ Template.card.rendered = ->
   $el.bind 'showPlaceholder', (event, data) =>
     absMedianY = $el.offset().top + $el.height()/2 #should probably cache for performance
     # Put placeholder before card if mouse is less than halfway past card, else put it after.
-    if data.y < absMedianY and @currentPlaceholder != 'before'
+    if data.y < absMedianY
       setPlaceholder this.data._id, 'before'
-    else if data.y > absMedianY and @currentPlaceholder != 'after'
+    else if data.y > absMedianY
       setPlaceholder this.data._id, 'after'
 
   cardDragging = Session.get 'cardDragging'
