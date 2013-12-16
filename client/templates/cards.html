@@ -1,5 +1,8 @@
 <template name="card">
-  <div class="card">
+  {{#if hasPlaceholder "before"}}
+    {{> cardPlaceholder}}
+  {{/if}}
+  <div class="card {{dragging}}">
     {{content}}
     <input type="text" value="{{content}}" />
     <input type="button" class="update-card" value="Update" />
@@ -11,4 +14,7 @@
       {{/each}}
     </select>
   </div>
+  {{#if hasPlaceholder "after"}}
+    {{> cardPlaceholder}}
+  {{/if}}
 </template>

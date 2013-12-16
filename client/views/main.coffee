@@ -8,43 +8,41 @@ Template.app.events
     Session.set 'showLogin', !Session.get('showLogin')
 
   'mousemove': (e, t) ->
-    if Session.get 'isDragging'
-      $el = $(t.dragTarget)
+    cardDragging = Session.get 'cardDragging'
+    if cardDragging
+      $el = $('.card.dragging')
+      # $el = $(t.dragTarget)
+
 
       # Position draggable x relative to original grab point, but center draggable Y about current cursor position
-      posX = e.pageX-t.dragOffset.x
+      posX = e.pageX-cardDragging.offset.x
       posY = e.pageY-($el.height()/2)
 
       $el.css
         left: posX + 'px'
         top: posY + 'px'
 
+      Session.set 'cardDragCoords',
+        x: posX
+        y: posY
+
       # Get the element beneath the object being dragged.
-      # $el.hide()
-      # console.log document.elementFromPoint e.pageX, e.pageY
-      # $el.show()
+      # Note: This causes mousemove to fire continuously (even on not mousemove.)
+      # Same issue seems to happen with native dragmove event.
 
-Template.app.created = ->
-  #Fixes isDragging session var preserving through automated refresh on code change.
-  Session.set 'isDragging', false
+      $el.hide()
+      targetElement = document.elementFromPoint e.pageX, e.pageY
+      $el.show()
 
-Template.app.rendered =  ->
+      $(targetElement).trigger 'showPlaceholder', 
+        x: e.pageX
+        y: e.pageY
 
-  # Element dragging is handled on the app level in order to allow dragging anywhere in the app space.
-
-  # Make sure there is only one drag bind
-  # Note: this is not the native html5 dragstart event. Native dragstart does not support mobile.
-  $('.app').unbind 'dragStart'
-  $('.app').bind 'dragStart', (event, data) =>
-
-    # Set app state as dragging
-    Session.set 'isDragging', true
-
-    # Store target being dragged and relative positioning for drag updates.
-    @dragTarget = data.target
-    @dragOffset = 
-      x: data.clickEvent.pageX
-      y: data.clickEvent.pageY
+      # todo:
+      # get targetElement
+      # if above 50% height, insert placeholder before, else after
+      # on drop trigger dragDrop event on targetElement. pass card id
+      # on dragDrop update dragging card board_id to target board_id
 
 Template.main.boards = ->
   App.Boards.getAllowedBoards()

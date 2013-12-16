@@ -19,18 +19,58 @@ Template.card.events
 
   'click': (e, t) ->
 
-    if not Session.get 'isDragging'
+    if not Session.get 'cardDragging'
       el = t.find('.card')
 
-      $(el).css
-        'background-color': 'red'
-        'position': 'fixed'
-        'width': '100%'
-        'z-index': 4000
-
-      t.isDragging = true
+      Session.set 'cardDragging', 
+        id: this._id
+        offset:
+          x: e.pageX
+          y: e.pageY
 
       # dragStart handled in app template.
       $(el).trigger 'dragStart',
         clickEvent: e
         target: el
+
+setPlaceholder = (cardId, orientation) ->
+  Session.set 'currentCardPlaceholder',
+    cardId: cardId
+    orientation: orientation
+
+Template.card.hasPlaceholder = (orientation) ->
+  placeholder = Session.get 'currentCardPlaceholder'
+  if placeholder?.cardId == this._id
+    if !orientation 
+      return true
+    else
+      return placeholder.orientation == orientation
+  else
+    return null
+
+Template.card.dragging = ->
+  cardDragging = Session.get 'cardDragging'
+  if cardDragging and cardDragging.id == this._id
+    return 'dragging'
+  else
+    return ''
+
+Template.card.rendered = ->
+  $el = $(@find('.card'))
+
+  $el.unbind('showPlaceholder')
+  $el.bind 'showPlaceholder', (event, data) =>
+    absMedianY = $el.offset().top + $el.height()/2 #should probably cache for performance
+    # Put placeholder before card if mouse is less than halfway past card, else put it after.
+    if data.y < absMedianY and @currentPlaceholder != 'before'
+      setPlaceholder this.data._id, 'before'
+    else if data.y > absMedianY and @currentPlaceholder != 'after'
+      setPlaceholder this.data._id, 'after'
+
+  cardDragging = Session.get 'cardDragging'
+  if cardDragging and cardDragging.id == this.data._id
+    coords = Session.get('cardDragCoords')
+    return if not coords
+    $el.css
+      left: coords.x + 'px'
+      top: coords.y + 'px'
