@@ -7,19 +7,23 @@
 </body>
 
 <template name="app">
-  {{#if showLogin}}
-    <div class='login-backdrop'></div>
-  {{/if}}
-  {{> header}}
-  {{> main}}
+  <div class="app">
+    {{#if showLogin}}
+      <div class="login-backdrop"></div>
+    {{/if}}
+    {{> header}}
+    {{> main}}
+  </div>
 </template>
 
 <template name="main">
   <div class="main">
-    <div class="boards">
-      {{#each boards}}
-        {{> board}}
-      {{/each}}
+    <div class="desk">
+      <div class="boards">
+        {{#each boards}}
+          {{> board}}
+        {{/each}}
+      </div>
     </div>
     <div class="my-board dock">
       {{> board myBoard}}

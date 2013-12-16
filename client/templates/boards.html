@@ -5,7 +5,11 @@
     {{ownerName}}
     <div class="cards">
       {{#each cards}}
-        {{> card}}
+        {{#if isCardPlaceholder}}
+          {{> cardPlaceholder}}
+        {{else}}
+          {{> card}}
+        {{/if}}
       {{/each}}
     </div>
     <textarea class="new-card-text"></textarea>

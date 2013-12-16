@@ -16,3 +16,21 @@ Template.card.events
     newBoardId = t.find('.select-board').value
 
     App.Cards.moveCard this._id, newBoardId
+
+  'click': (e, t) ->
+
+    if not Session.get 'isDragging'
+      el = t.find('.card')
+
+      $(el).css
+        'background-color': 'red'
+        'position': 'fixed'
+        'width': '100%'
+        'z-index': 4000
+
+      t.isDragging = true
+
+      # dragStart handled in app template.
+      $(el).trigger 'dragStart',
+        clickEvent: e
+        target: el

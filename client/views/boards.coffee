@@ -1,7 +1,14 @@
 App = share
 
 Template.board.cards = () ->
-  App.Cards.find board_id: this._id
+  # App.Cards.find board_id: this._id
+  @cards = App.Cards.find(board_id: this._id).map (card) ->
+    card
+
+  @cards
+
+Template.board.isCardPlaceholder = () ->
+  @isPlaceholder
 
 Template.board.ownerName = () ->
   ownerId = this.owner_id
