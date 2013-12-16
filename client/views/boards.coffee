@@ -28,3 +28,10 @@ Template.board.events
     App.Cards.createCard data, (err, _id) ->
       t.find('.new-card-text').value = ''
       console.log 'New Card', App.Cards.findOne(_id)
+
+Template.board.rendered = ->
+  $cards = $(@find('.cards'))
+  $cards.unbind 'showPlaceholder'
+  
+  $cards.bind 'showPlaceholder', (event, data) ->
+    event.stopPropagation()

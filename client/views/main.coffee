@@ -44,6 +44,15 @@ Template.app.events
       # on drop trigger dragDrop event on targetElement. pass card id
       # on dragDrop update dragging card board_id to target board_id
 
+Template.app.rendered = ->
+  $el = $('.app')
+  $el.unbind('showPlaceholder')
+  $el.bind 'showPlaceholder', (event, data) =>
+    # Triggering here means the the cursor is not inside a cards collection.
+    # (stopPropagation() is called in boards.coffee)
+    # Clear placeholder.
+    Session.set 'currentCardPlaceholder', null
+
 Template.main.boards = ->
   App.Boards.getAllowedBoards()
 
