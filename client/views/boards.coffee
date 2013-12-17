@@ -3,10 +3,20 @@ App = share
 Template.board.helpers
   cards: ->
     # App.Cards.find board_id: this._id
-    @cards = App.Cards.find(board_id: this._id).map (card) ->
-      card
 
-    @cards
+    cards = App.Cards.find 
+      board_id: this._id
+    ,
+      sort:
+        ordinal: 1
+
+    # @cards = App.Cards.find(board_id: this._id).map (card) ->
+    #   card
+
+    console.log cards.map (card) ->
+        card.ordinal
+
+    cards
 
   isCardPlaceholder: ->
     @isPlaceholder

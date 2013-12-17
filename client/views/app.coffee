@@ -9,14 +9,14 @@ Template.app.events
     Session.set 'showLogin', !Session.get('showLogin')
 
   'mousemove': (e, t) ->
-    cardDragging = Session.get 'cardDragging'
-    if cardDragging
+    drag = Session.get 'cardDragging'
+    if drag and not drag.dropping
       $el = $('.card.dragging')
       # $el = $(t.dragTarget)
 
 
       # Position draggable x relative to original grab point, but center draggable Y about current cursor position
-      posX = e.pageX-cardDragging.offset.x
+      posX = e.pageX-drag.offset.x
       posY = e.pageY-($el.height()/2)
 
       $el.css
@@ -43,10 +43,11 @@ Template.app.events
       # on drop trigger dragDrop event on targetElement. pass card id
       # on dragDrop update dragging card board_id to target board_id
 
-  # 'mouseup': (e, t) ->
-  #   console.log 'mouseup'
-  #   if Session.get 'cardDragging'
-  #     Session.set 'cardDragging', null
+  'mouseup': (e, t) ->
+    drag = Session.get 'cardDragging'
+    if drag and not drag.dropping
+      drag.dropping = true
+      Session.set 'cardDragging', drag
 
 Template.app.rendered = ->
   $el = $('.app')
@@ -55,4 +56,4 @@ Template.app.rendered = ->
     # Triggering here means the the cursor is not inside a cards collection.
     # (stopPropagation() is called in boards.coffee)
     # Clear placeholder.
-    Session.set 'currentCardPlaceholder', null
+    Session.set 'cardPlaceholderTarget', null

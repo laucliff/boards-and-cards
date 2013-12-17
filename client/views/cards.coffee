@@ -1,9 +1,30 @@
 App = share
 
+Deps.autorun ->
+  drag = Session.get 'cardDragging'
+  if drag?.dropping
+    placeholderTarget = Session.get 'cardPlaceholderTarget'
+    placeholderOrientation = Session.get 'cardPlaceholderOrientation'
+
+    if placeholderTarget
+
+      target = App.Cards.findOne _id: placeholderTarget
+
+      if placeholderOrientation == 'before'
+        index = target.ordinal - 1
+      else
+        index = target.ordinal + 1
+
+      Meteor.call 'insertCard', drag.id, target.board_id, index
+
+
+    Session.set 'cardDragging', null
+    Session.set 'cardPlaceholderTarget', null
+
 setPlaceholder = (cardId, orientation) ->
-  Session.set 'currentCardPlaceholder',
-    cardId: cardId
-    orientation: orientation
+
+  Session.set 'cardPlaceholderTarget', cardId
+  Session.set 'cardPlaceholderOrientation', orientation
 
 Template.card.helpers
   boards: ->
@@ -12,17 +33,19 @@ Template.card.helpers
   # This is calling render on every card every time placeholder is updated.
   # Should only update if losing a placeholder, or adding/moving a placeholder.
   hasPlaceholder: (orientation) ->
-    placeholder = Session.get 'currentCardPlaceholder'
-    return null if placeholder?.cardId != this._id
 
-    if !orientation 
+    return false if Session.get('cardPlaceholderTarget') != this._id
+
+    placeholderOrientation = Session.get 'cardPlaceholderOrientation'
+
+    if !orientation
       return true
     else
-      return placeholder.orientation == orientation
+      return placeholderOrientation == orientation
 
   dragging: ->
-    cardDragging = Session.get 'cardDragging'
-    if cardDragging and cardDragging.id == this._id
+    drag = Session.get 'cardDragging'
+    if drag and drag.id == this._id and not drag.dropping
       return 'dragging'
     else
       return ''
@@ -42,13 +65,18 @@ Template.card.events
 
     App.Cards.moveCard this._id, newBoardId
 
+  'click': (e, t) ->
+    t.mouseDown = false
+
+    true
+
   'mousedown': (e, t) ->
     t.mouseDown = true
 
   'mouseup': (e, t) ->
     t.mouseDown = false
-    if Session.get 'cardDragging'
-      Session.set 'cardDragging', null
+
+    true
 
   'mousemove': (e, t) ->
     if t.mouseDown and not Session.get 'cardDragging'
@@ -62,6 +90,7 @@ Template.card.events
           y: e.pageY
 
 Template.card.rendered = ->
+  console.log 'rendered', this.data._id
   $el = $(@find('.card'))
 
   $el.unbind('showPlaceholder')
@@ -73,8 +102,8 @@ Template.card.rendered = ->
     else if data.y > absMedianY
       setPlaceholder this.data._id, 'after'
 
-  cardDragging = Session.get 'cardDragging'
-  if cardDragging and cardDragging.id == this.data._id
+  drag = Session.get 'cardDragging'
+  if drag and drag.id == this.data._id
     coords = Session.get('cardDragCoords')
     return if not coords
     $el.css
