@@ -58,6 +58,10 @@ body {
   z-index: 4000;
 }
 
+.card > input, select, textarea {
+  width: auto;
+}
+
 .card-placeholder {
   background-color: darkgray;
 }
