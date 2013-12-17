@@ -13,3 +13,4 @@ Deps.autorun () ->
 
 Meteor.startup ->
   console.log 'This is client'
+  Session.set 'cardDragging', null
