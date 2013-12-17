@@ -12,17 +12,17 @@ Template.app.events
     drag = Session.get 'cardDragging'
     if drag and not drag.dropping
       $el = $('.card.dragging')
-      # $el = $(t.dragTarget)
-
 
       # Position draggable x relative to original grab point, but center draggable Y about current cursor position
       posX = e.pageX-drag.offset.x
       posY = e.pageY-($el.height()/2)
 
+      # Immediately update the css position of dragging element.
       $el.css
         left: posX + 'px'
         top: posY + 'px'
 
+      # Session variable for drag element re-renders.
       Session.set 'cardDragCoords',
         x: posX
         y: posY
@@ -39,11 +39,8 @@ Template.app.events
         x: e.pageX
         y: e.pageY
 
-      # todo:
-      # on drop trigger dragDrop event on targetElement. pass card id
-      # on dragDrop update dragging card board_id to target board_id
-
   'mouseup': (e, t) ->
+    # Drop is handled in a Deps.autorun in cards.coffee
     drag = Session.get 'cardDragging'
     if drag and not drag.dropping
       drag.dropping = true

@@ -1,13 +1,16 @@
 App = share
 
 Deps.autorun ->
+
+  # Handle card drop event. Insert the card in the currently active placeholder target if it exists.
+  # Otherwise just return the card back to its original location.
+  # Card dropping handled is called on mouseup in app.coffee
   drag = Session.get 'cardDragging'
   if drag?.dropping
     placeholderTarget = Session.get 'cardPlaceholderTarget'
     placeholderOrientation = Session.get 'cardPlaceholderOrientation'
 
     if placeholderTarget
-
       target = App.Cards.findOne _id: placeholderTarget
 
       if placeholderOrientation == 'before'
@@ -22,7 +25,6 @@ Deps.autorun ->
     Session.set 'cardPlaceholderTarget', null
 
 setPlaceholder = (cardId, orientation) ->
-
   Session.set 'cardPlaceholderTarget', cardId
   Session.set 'cardPlaceholderOrientation', orientation
 
@@ -82,7 +84,8 @@ Template.card.events
     if t.mouseDown and not Session.get 'cardDragging'
       el = t.find('.card')
 
-      # Dragging handled in app.coffee
+      # Start dragging card.
+      # Dragging behaviour handled in app.coffee
       Session.set 'cardDragging', 
         id: this._id
         offset:
@@ -90,7 +93,6 @@ Template.card.events
           y: e.pageY
 
 Template.card.rendered = ->
-  console.log 'rendered', this.data._id
   $el = $(@find('.card'))
 
   $el.unbind('showPlaceholder')
