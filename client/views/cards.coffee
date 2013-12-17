@@ -23,13 +23,11 @@ Deps.autorun ->
 
     Session.set 'cardDragging', null
 
+
 Deps.autorun ->
+  # Invalidating cardDragging will also clear any placeholders present.
   if not Session.get('cardDragging')
     Session.set 'cardPlaceholderTarget', null
-
-setPlaceholder = (cardId, orientation) ->
-  Session.set 'cardPlaceholderTarget', cardId
-  Session.set 'cardPlaceholderOrientation', orientation
 
 Template.card.helpers
   boards: ->
@@ -94,6 +92,10 @@ Template.card.events
         offset:
           x: e.pageX
           y: e.pageY
+
+setPlaceholder = (cardId, orientation) ->
+  Session.set 'cardPlaceholderTarget', cardId
+  Session.set 'cardPlaceholderOrientation', orientation
 
 Template.card.rendered = ->
   $el = $(@find('.card'))
