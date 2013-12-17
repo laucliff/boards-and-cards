@@ -22,6 +22,9 @@ Deps.autorun ->
 
 
     Session.set 'cardDragging', null
+
+Deps.autorun ->
+  if not Session.get('cardDragging')
     Session.set 'cardPlaceholderTarget', null
 
 setPlaceholder = (cardId, orientation) ->
