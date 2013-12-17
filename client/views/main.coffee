@@ -2,7 +2,7 @@ App = share
 
 Template.main.helpers
   boards: ->
-    App.Boards.getAllowedBoards()
+    App.Boards.getDeskBoards()
 
   myBoard: ->
     if Meteor.user()?

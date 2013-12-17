@@ -16,7 +16,7 @@ class BoardsCollection extends Meteor.Collection
       owner_id: Meteor.user()._id
       type: 'personal'
 
-  getAllowedBoards: (userId) ->
+  getDeskBoards: (userId) ->
 
     ownerId = userId or Meteor.user()?._id
 

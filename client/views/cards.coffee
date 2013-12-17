@@ -30,7 +30,7 @@ setPlaceholder = (cardId, orientation) ->
 
 Template.card.helpers
   boards: ->
-    App.Boards.getAllowedBoards()
+    App.Boards.find()
 
   # This is calling render on every card every time placeholder is updated.
   # Should only update if losing a placeholder, or adding/moving a placeholder.
