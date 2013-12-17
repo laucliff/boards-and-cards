@@ -65,11 +65,6 @@ Template.card.events
   'click .delete-card': (e, t) ->
     App.Cards.destroyCard this._id
 
-  'click .move-card': (e, t) ->
-    newBoardId = t.find('.select-board').value
-
-    App.Cards.moveCard this._id, newBoardId
-
   'mousedown': (e, t) ->
     t.mouseDown =
       x: e.pageX

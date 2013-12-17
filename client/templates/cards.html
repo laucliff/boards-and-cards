@@ -7,14 +7,6 @@
     <input type="text" value="{{content}}" />
     <input type="button" class="update-card" value="Update" />
     <input type="button" class="delete-card" value="Delete" />
-    <input type="button" class="move-card" value="Move" />
-    <select class="select-board">
-      {{#each boards}}
-        <option value="{{_id}}"> {{name}} </option>
-      {{/each}}
-    </select>
-
-    
   </div>
   {{#if hasPlaceholder "after"}}
     {{> cardPlaceholder}}
