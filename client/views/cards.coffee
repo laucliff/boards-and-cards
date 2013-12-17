@@ -53,6 +53,8 @@ Template.card.helpers
     else
       return ''
 
+maxDragDifference = (current, previous) ->
+  Math.max current.x-previous.x, current.y-previous.y
 
 Template.card.events
   'click .update-card': (e, t) ->
@@ -68,30 +70,30 @@ Template.card.events
 
     App.Cards.moveCard this._id, newBoardId
 
-  'click': (e, t) ->
-    t.mouseDown = false
-
-    true
-
   'mousedown': (e, t) ->
-    t.mouseDown = true
+    t.mouseDown =
+      x: e.pageX
+      y: e.pageY
 
   'mouseup': (e, t) ->
-    t.mouseDown = false
+    t.mouseDown = null
 
     true
 
   'mousemove': (e, t) ->
+    # Only start dragging if we have started dragging for at least 3 pixels.
+    # This addresses a right click mousemove chrome bug.
     if t.mouseDown and not Session.get 'cardDragging'
-      el = t.find('.card')
+      if maxDragDifference({x: e.pageX, y: e.pageY}, t.mouseDown) > 3
+        el = t.find('.card')
 
-      # Start dragging card.
-      # Dragging behaviour handled in app.coffee
-      Session.set 'cardDragging', 
-        id: this._id
-        offset:
-          x: e.pageX
-          y: e.pageY
+        # Start dragging card.
+        # Dragging behaviour handled in app.coffee
+        Session.set 'cardDragging', 
+          id: this._id
+          offset:
+            x: e.pageX
+            y: e.pageY
 
 setPlaceholder = (cardId, orientation) ->
   Session.set 'cardPlaceholderTarget', cardId
