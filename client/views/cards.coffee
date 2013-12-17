@@ -54,7 +54,7 @@ Template.card.helpers
       return ''
 
 maxDragDifference = (current, previous) ->
-  Math.max current.x-previous.x, current.y-previous.y
+  Math.max Math.abs(current.x-previous.x), Math.abs(current.y-previous.y)
 
 Template.card.events
   'click .update-card': (e, t) ->
